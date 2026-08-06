@@ -19,6 +19,7 @@ jobs:
           echo "committo=${{ vars.committo }}" >> $GITHUB_ENV
           echo "auth_url=${{ secrets.auth_url }}" >> $GITHUB_ENV
           echo "destructive_file_name=destructiveChanges.xml" >> $GITHUB_ENV
+          echo "deploymentuser=${{ vars.deploymentuser }}" >> $GITHUB_ENV
 
       - name: install sf cli
         run: |
