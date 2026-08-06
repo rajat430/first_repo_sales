@@ -36,7 +36,7 @@ jobs:
       - name: generate delta
         run: |
           mkdir delta
-          sf sgd:source:delta --from $commitfrom --to $committo --output ./delta --generate-delta 65.0
+          sf sgd:source:delta --from $commitfrom --to $committo --output ./delta --generate-delta -a 65.0
           cp sfdx-project.json delta/sfdx-project.json
           cp delta/package/package.xml delta/package.xml
       - name: validate delta
