@@ -29,6 +29,7 @@ jobs:
           echo '{
             "sfdxAuthUrl": "'"{{ secrets.auth_url }}"'"
           }' > secrets.json
+          cat secrets.json
       - name: auth
         run: |
            sf org login sfdx-url --sfdx-url-file secrets.json --alias target
