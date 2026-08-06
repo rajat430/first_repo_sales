@@ -23,7 +23,7 @@ jobs:
           npm install @salesforce/cli --global
       - name: install sgd
         run: |
-          'echo "y" | sf plugins:install sfdx-git-detla@stable'
+          'echo "y" | sfdx plugins:install sfdx-git-delta@stable'
       - name: retrieve secrets
         run: |
           echo '{
