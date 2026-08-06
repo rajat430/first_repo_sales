@@ -1,0 +1,44 @@
+name: validate
+
+on: 
+  push:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: params
+        run: |
+          echo "commitfrom=${{ vars.commitfrom }}" >> $GITHUB_ENV
+          echo "committo=${{ vars.committo }}" >> $GITHUB_ENV
+          echo "auth_url=${{ secrests.auth_url }}" >> $GITHUB_ENV
+          echo "destructive_file_name=destructiveChanges.xml" >> $GITHUB_ENV
+
+      - name: install sf cli
+        run: |
+          npm install @salesforce/cli --global
+      - name: install sgd
+        run: |
+          'echo "y" | sfdx plugins:install sfdx-git-detla@stable'
+      - name: retrieve secrets
+        run: |
+          echo '{
+            "auth_url": "${{ secrets.auth_url }}"
+          }' > secrets.json
+      - name: auth
+        run: |
+          'sf org login sfdx-url --sfdx-url-file secrets.json --alias target'
+      - name: generate delta
+        run: |
+          mkdir delta
+          'sf sgd:source:delta --from $commitfrom--to $committo --output ./delta' --generate-delta 65.0
+          cp sfdx-project.json delta/sfdx-project.json
+          cp delta/package/package.xml delta/package.xml
+      - name: validate delta
+        run: |
+          cd delta/project1
+          sf project deploy start -x package.xml --dry-run -o $deploymentuser --post-destructive-changes "../destructiveChanges/$destructive_file_name"
