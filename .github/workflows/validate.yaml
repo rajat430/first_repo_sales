@@ -27,7 +27,7 @@ jobs:
       - name: retrieve secrets
         run: |
           echo '{
-            "auth_url": "${{ secrets.auth_url }}"
+            "sfdxAuthUrl": "'"{{ secrets.auth_url }}"'"
           }' > secrets.json
       - name: auth
         run: |
