@@ -15,10 +15,11 @@ jobs:
           node-version: 24
       - name: params
         run: |
+          destructive_file_name=destructiveChanges_copy.xml
           echo "commitfrom=${{ vars.commitfrom }}" >> $GITHUB_ENV
           echo "committo=${{ vars.committo }}" >> $GITHUB_ENV
           echo "auth_url=${{ secrets.auth_url }}" >> $GITHUB_ENV
-          echo "destructive_file_name=destructiveChanges_copy.xml" >> $GITHUB_ENV
+          echo "destructive_file_name=$destructive_file_name" >> $GITHUB_ENV
           echo "deploymentuser=${{ vars.deploymentuser }}" >> $GITHUB_ENV
 
       - name: install sf cli
