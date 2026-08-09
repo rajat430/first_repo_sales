@@ -18,7 +18,7 @@ jobs:
           echo "commitfrom=${{ vars.commitfrom }}" >> $GITHUB_ENV
           echo "committo=${{ vars.committo }}" >> $GITHUB_ENV
           echo "auth_url=${{ secrets.auth_url }}" >> $GITHUB_ENV
-          echo "destructive_file_name=destructiveChanges.xml" >> $GITHUB_ENV
+          echo "destructive_file_name=destructiveChanges_copy.xml" >> $GITHUB_ENV
           echo "deploymentuser=${{ vars.deploymentuser }}" >> $GITHUB_ENV
 
       - name: install sf cli
@@ -41,9 +41,10 @@ jobs:
           mkdir delta
           sf sgd:source:delta --from $commitfrom --to $committo --output ./delta --generate-delta -a 65.0
           cp project1/sfdx-project.json delta/project1
+          cp delta/destructiveChanges/${destructive_file_name} delta/destructiveChanges/${destructive_file_name}
           cp delta/package/package.xml delta/project1
       - name: validate delta
         run: |
-          ls -ltRa
+          ls -ltRa  
           cd delta/project1
           sf project deploy start -x package.xml --dry-run -o $deploymentuser --post-destructive-changes "../destructiveChanges/$destructive_file_name"
