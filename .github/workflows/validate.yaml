@@ -20,6 +20,7 @@ jobs:
           echo "committo=${{ vars.committo }}" >> $GITHUB_ENV
           echo "auth_url=${{ secrets.auth_url }}" >> $GITHUB_ENV
           echo "destructive_file_name=$destructive_file_name" >> $GITHUB_ENV
+          echo "DESTRUCTIVE=${{ vars.DESTRUCTIVE }}" >> $GITHUB_ENV
           echo "deploymentuser=${{ vars.deploymentuser }}" >> $GITHUB_ENV
 
       - name: install sf cli
@@ -48,4 +49,14 @@ jobs:
         run: |
           ls -ltRa  
           cd delta/project1
-          sf project deploy start -x package.xml --dry-run -o $deploymentuser --verbose --post-destructive-changes "../destructiveChanges/$destructive_file_name" --ignore-warnings --wait 10
+
+          if [[ $DESTRUCTIVE == "true" ]]; then
+            echo "Destructive changes will be applied with small true"
+          elif [[ $DESTRUCTIVE == "TRUE" ]]; then
+            echo "Destructive changes will be applied with capital TRUE"
+          else
+            echo "Destructive changes will NOT be applied"
+          fi
+
+
+          sf project deploy start -x package.xml --dry-run -o $deploymentuser --verbose --post-destructive-changes "../destructiveChanges/$destructive_file_name" --ignore-warnings --wait 10 
