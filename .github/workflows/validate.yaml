@@ -48,4 +48,4 @@ jobs:
         run: |
           ls -ltRa  
           cd delta/project1
-          sf project deploy start -x package.xml --dry-run -o $deploymentuser --post-destructive-changes "../destructiveChanges/$destructive_file_name" --ignore-warnings --wait 10
+          sf project deploy start -x package.xml --dry-run -o $deploymentuser --verbose --post-destructive-changes "../destructiveChanges/$destructive_file_name" --ignore-warnings --wait 10
