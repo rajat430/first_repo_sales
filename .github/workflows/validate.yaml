@@ -48,7 +48,7 @@ jobs:
       - name: validate delta
         run: |
           ls -ltRa  
-          cd delta/project1
+          cd delta/destructiveChanges
 
           if [[ $DESTRUCTIVE == "true" ]]; then
             echo "Destructive changes will be applied with small true"
@@ -59,4 +59,4 @@ jobs:
           fi
 
 
-          sf project deploy start --dry-run -o $deploymentuser --verbose --post-destructive-changes "../destructiveChanges/$destructive_file_name" --ignore-warnings --wait 10 
+          sf project deploy start -d . --dry-run -o $deploymentuser --verbose --ignore-warnings --wait 10 
