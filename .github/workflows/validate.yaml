@@ -15,12 +15,10 @@ jobs:
           node-version: 24
       - name: params
         run: |
-          destructive_file_name=destructiveChanges_copy.xml
           echo "commitfrom=${{ vars.commitfrom }}" >> $GITHUB_ENV
           echo "committo=${{ vars.committo }}" >> $GITHUB_ENV
           echo "auth_url=${{ secrets.auth_url }}" >> $GITHUB_ENV
-          echo "destructive_file_name=$destructive_file_name" >> $GITHUB_ENV
-          echo "DESTRUCTIVE=${{ vars.DESTRUCTIVE }}" >> $GITHUB_ENV
+          echo "destructive_file_name=destructiveChanges.xml" >> $GITHUB_ENV
           echo "deploymentuser=${{ vars.deploymentuser }}" >> $GITHUB_ENV
 
       - name: install sf cli
@@ -43,20 +41,8 @@ jobs:
           mkdir delta
           sf sgd:source:delta --from $commitfrom --to $committo --output ./delta --generate-delta -a 65.0
           cp project1/sfdx-project.json delta/project1
-          cp delta/destructiveChanges/destructiveChanges.xml delta/destructiveChanges/${destructive_file_name}
           cp delta/package/package.xml delta/project1
       - name: validate delta
         run: |
-          ls -ltRa  
-          cd delta/destructiveChanges
-
-          if [[ $DESTRUCTIVE == "true" ]]; then
-            echo "Destructive changes will be applied with small true"
-          elif [[ $DESTRUCTIVE == "TRUE" ]]; then
-            echo "Destructive changes will be applied with capital TRUE"
-          else
-            echo "Destructive changes will NOT be applied"
-          fi
-
-
-          sf project deploy start -d . --dry-run -o $deploymentuser --verbose --ignore-warnings --wait 10 
+          cd delta/project1
+          sf project deploy start -x ../package/package.xml --dry-run -o $deploymentuser --post-destructive-changes "../destructiveChanges/$destructive_file_name"
