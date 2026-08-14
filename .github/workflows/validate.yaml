@@ -48,7 +48,8 @@ jobs:
           cp delta/package/package.xml delta/project1
       - name: validate delta
         run: |
-          sf project deploy start -x ./delta/package/package.xml --dry-run -o $deploymentuser --post-destructive-changes "./delta/destructiveChanges/$destructive_file_name"
+          cd project1
+          sf project deploy start -x ../delta/package/package.xml --dry-run -o $deploymentuser --post-destructive-changes "../delta/destructiveChanges/$destructive_file_name"
           cd delta/project1
           cat "../destructiveChanges/$destructive_file_name"
           cat ../package/package.xml
