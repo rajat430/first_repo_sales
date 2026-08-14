@@ -40,6 +40,9 @@ jobs:
         run: |
           mkdir delta
           sf sgd:source:delta --from $commitfrom --to $committo --output ./delta --generate-delta -a 65.0
+          if [ ! -d "..delta/project1" ];then
+            mkdir "./delta/project1"
+          fi
           cp project1/sfdx-project.json delta/project1
           cp delta/package/package.xml delta/project1
       - name: validate delta
