@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir delta
           sf sgd:source:delta --from $commitfrom --to $committo --output ./delta --generate-delta -a 65.0
-          if [ ! -d "..delta/project1" ];then
+          if [ ! -d "./delta/project1" ];then
             mkdir "./delta/project1"
             find "./project1" -type d -exec sh -c 'mkdir -p "./delta/project1/${1#./project1/}"' _ {} \;          
           fi
